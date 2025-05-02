@@ -1,2 +1,2 @@
-# Kart-o
+# Kartao
 JSON driven Kanban board
