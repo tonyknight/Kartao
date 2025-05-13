@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  kartao:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "5043:5043"
+    volumes:
+      - ../volumes/data:/app/data
+      - ../volumes/css:/app/css
+    environment:
+      - NODE_ENV=development
+      - DEFAULT_COLUMNS=Backlog,To Do,In Progress,Testing,Completed
+    restart: unless-stopped 

@@ -1,0 +1,30 @@
+{
+  "name": "My First Board",
+  "columns": [
+    {
+      "id": "col-0",
+      "name": "Backlog",
+      "cards": []
+    },
+    {
+      "id": "col-1",
+      "name": "To Do",
+      "cards": []
+    },
+    {
+      "id": "col-2",
+      "name": "In Progress",
+      "cards": []
+    },
+    {
+      "id": "col-3",
+      "name": "Testing",
+      "cards": []
+    },
+    {
+      "id": "col-4",
+      "name": "Completed",
+      "cards": []
+    }
+  ]
+}
