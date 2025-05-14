@@ -24,13 +24,11 @@ const FileManager: React.FC<FileManagerProps> = ({ onFileSelect, selectedFile, o
   const fetchFiles = async () => {
     setState('loading');
     try {
-      const response = await axios.get<string[]>('/api/files');
-      const fileInfos = response.data
-        .filter(file => file.endsWith('.json'))
-        .map(file => ({
-          name: file,
-          isKartaoFile: false // Will be validated when selected
-        }));
+      const response = await axios.get('/api/boards');
+      const fileInfos = response.data.map((board: any) => ({
+        name: `${board.name.toLowerCase().replace(/\s+/g, '-')}.json`,
+        isKartaoFile: true
+      }));
       setFiles(fileInfos);
       setState(fileInfos.length === 0 ? 'empty' : 'ready');
     } catch (err: any) {
@@ -60,16 +58,7 @@ const FileManager: React.FC<FileManagerProps> = ({ onFileSelect, selectedFile, o
   }, []);
 
   const handleFileSelect = async (fileName: string) => {
-    try {
-      const response = await axios.get(`/api/validate/${fileName}`);
-      if (response.data.isValid) {
-        onFileSelect(fileName);
-      } else {
-        alert('This is not a valid Kartao project file.');
-      }
-    } catch (err) {
-      alert('Failed to validate file. It may not be a Kartao project file.');
-    }
+    onFileSelect(fileName);
   };
 
   const handleImport = async () => {
