@@ -13,7 +13,7 @@ app.use(express.json());
 // Constants
 const DATA_DIR = process.env.NODE_ENV === 'production' 
   ? (process.env.DATA_DIR || '/app/data')
-  : path.join(__dirname, '../../../../Kartao/kartao/volumes/data');
+  : path.join(__dirname, '../../../volumes/data');
 const DEFAULT_COLUMNS = (process.env.DEFAULT_COLUMNS || 'Backlog,To Do,In Progress,Testing,Completed').split(',');
 
 console.log('Data directory path:', DATA_DIR);
@@ -60,7 +60,7 @@ app.get('/api/boards', async (req: Request, res: Response) => {
   try {
     console.log('Attempting to read directory:', DATA_DIR);
     const files = await fs.readdir(DATA_DIR);
-    console.log('Files found:', files);
+    console.log('Files found in directory:', files);
     
     const boards = await Promise.all(
       files
@@ -68,10 +68,17 @@ app.get('/api/boards', async (req: Request, res: Response) => {
         .map(async (file: string) => {
           const filePath = path.join(DATA_DIR, file);
           console.log('Reading file:', filePath);
-          const content = await fs.readFile(filePath, 'utf-8');
-          return JSON.parse(content) as Board;
+          try {
+            const content = await fs.readFile(filePath, 'utf-8');
+            console.log('File content:', content);
+            return JSON.parse(content) as Board;
+          } catch (error) {
+            console.error(`Error reading file ${file}:`, error);
+            throw error;
+          }
         })
     );
+    console.log('Boards to be sent:', boards);
     res.json(boards);
   } catch (error) {
     console.error('Error reading boards:', error);
